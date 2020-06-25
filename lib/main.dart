@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'CategoryListItem.dart';
 import 'Gallery.dart';
-
-
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -79,15 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
 //        ),
 //      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CategoryListItem()));
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-
-
-
-
-
