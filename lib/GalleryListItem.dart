@@ -1,10 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutterapp/models/CatImageList.dart';
+import 'package:flutterapp/network/CatApi.dart';
 
-class GalleryListItem extends StatelessWidget {
-  int _position = 0;
+class GalleryListItem extends StatefulWidget {
+  String name;
+  String description;
+  String id;
 
-  GalleryListItem(this._position);
+  GalleryListItem(this.id, this.name, this.description);
+
+  @override
+  State<StatefulWidget> createState() {
+    return GalleryListItemState(id, name, description);
+  }
+}
+
+class GalleryListItemState extends State<GalleryListItem> {
+  String name;
+  String description;
+  String id;
+  final CatApi catApi = CatApi();
+  CatImageList catImageList;
+
+  GalleryListItemState(this.id, this.name, this.description);
+
+  @override
+  void initState() {
+    getCatBreed();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,22 +40,28 @@ class GalleryListItem extends StatelessWidget {
         children: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 12.0),
-              child: Image.asset("assets/images/turkey.jpg")),
+              child: (catImageList == null ||
+                      catImageList.catImages == null ||
+                      catImageList.catImages.length == 0)
+                  ? Image.asset("assets/images/cat_avatar.jpg")
+                  : Image.network(catImageList.catImages[0].url)),
           Padding(
             padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 12.0),
-            child: Text(("item number: " + _position.toString()),
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline6),
+            child: Text(name, style: Theme.of(context).textTheme.headline6),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 12.0),
-            child: Text(
-                "Rights of Nature is the recognition and honoring that Nature has rights.  It is the recognition that our ecosystems – including trees, oceans, animals, mountains – have rights just as human beings have rights. Rights of Nature is about balancing what is good for human beings against what is good for other species, what is good for the planet as a world.  It is the holistic recognition that all life, all ecosystems on our planet are deeply intertwined."),
-          )
+              padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 12.0),
+              child: Text(description))
         ],
       ),
     );
+  }
+
+  void getCatBreed() async {
+    var res2 = await catApi.getCatBreed(id);
+    var catBreeds = json.decode(res2);
+    setState(() {
+      catImageList = CatImageList.fromJson(catBreeds);
+    });
   }
 }

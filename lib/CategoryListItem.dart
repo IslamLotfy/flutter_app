@@ -18,7 +18,7 @@ class _MyCategoryListItem extends State<CategoryListItem> {
           padding: EdgeInsets.all(12.0),
           child: InkWell(
             borderRadius: BorderRadius.circular(12.0),
-            splashColor: Colors.blueAccent,
+            splashColor: Color.fromRGBO(66, 165, 245, 1.0),
             highlightColor: Colors.lightBlueAccent,
             onTap: () {
               print("object");
